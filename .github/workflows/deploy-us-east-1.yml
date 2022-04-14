@@ -15,7 +15,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
         run: |
-          yarn --pure-lockfile
+          yarn --production --pure-lockfile
         env:
           CI: true
       - name: zip
@@ -27,7 +27,7 @@ jobs:
         with:
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_region: ${{ secrets.AWS_REGION }}
+          aws_region: us-east-1
           function_name: gha-lambda
           zip_file: bundle.zip
           debug: true
