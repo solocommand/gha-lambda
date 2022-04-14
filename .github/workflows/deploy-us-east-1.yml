@@ -1,33 +1,26 @@
-name: deploy to lambda
+name: Deploy us-east-1
 on: [push]
 jobs:
   deploy_source:
-    name: build and deploy lambda
-    strategy:
-      matrix:
-        node-version: [14.x]
+    name: Deploy source code
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: Install dependencies
+
+      - name: Install and build archive
         run: |
           yarn --production --pure-lockfile
-        env:
-          CI: true
-      - name: zip
-        uses: montudor/action-zip@v0.1.0
+          zip -rq9 bundle.zip . -x '*.git*'
+
+      # https://github.com/marketplace/actions/configure-aws-credentials-action-for-github-actions#assuming-a-role
+      # https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          args: zip -qq -r ./bundle.zip ./
-      - name: default deploy
-        uses: appleboy/lambda-action@master
-        with:
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_region: us-east-1
-          function_name: gha-lambda
-          zip_file: bundle.zip
-          debug: true
+          role-to-assume: ${{ secrets.AWS_LAMBDA_OIDC_ROLE }}
+          role-duration-seconds: 60
+          aws-region: us-east-1
+
+      - name: Update function code
+        run: |
+          aws lambda update-function-code --function-name gha-lambda --zip-file bundle.zip
