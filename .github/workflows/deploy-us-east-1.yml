@@ -25,4 +25,4 @@ jobs:
 
       - name: Update function code
         run: |
-          aws lambda update-function-code --function-name gha-lambda --zip-file bundle.zip
+          aws lambda update-function-code --function-name gha-lambda --zip-file fileb://bundle.zip
