@@ -1,5 +1,8 @@
 name: Deploy us-east-2
-on: [push]
+on:
+  push:
+    tags:
+      - v*
 jobs:
   deploy_source:
     permissions:
@@ -25,4 +28,4 @@ jobs:
 
       - name: Update function code
         run: |
-          aws lambda update-function-code --function-name pmmi-prosource-sync --zip-file fileb://bundle.zip
+          aws lambda update-function-code --function-name ${{ secrets.AWS_LAMBDA_FUNCTION_NAME }} --zip-file fileb://bundle.zip
