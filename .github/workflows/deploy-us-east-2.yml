@@ -1,4 +1,4 @@
-name: Deploy us-east-1
+name: Deploy us-east-2
 on: [push]
 jobs:
   deploy_source:
@@ -21,8 +21,8 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_LAMBDA_OIDC_ROLE }}
           role-duration-seconds: 900
-          aws-region: us-east-1
+          aws-region: us-east-2
 
       - name: Update function code
         run: |
-          aws lambda update-function-code --function-name gha-lambda --zip-file fileb://bundle.zip
+          aws lambda update-function-code --function-name pmmi-prosource-sync --zip-file fileb://bundle.zip
