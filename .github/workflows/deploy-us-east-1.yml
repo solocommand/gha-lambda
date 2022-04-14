@@ -2,6 +2,8 @@ name: Deploy us-east-1
 on: [push]
 jobs:
   deploy_source:
+    permissions:
+      id-token: write
     name: Deploy source code
     runs-on: ubuntu-latest
     steps:
