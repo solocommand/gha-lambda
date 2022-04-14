@@ -1,0 +1,20 @@
+{
+  "name": "gha-lambda",
+  "version": "0.0.0",
+  "description": "test repo for lambda deployment",
+  "main": "src/index.js",
+  "repository": "https://github.com/solocommand/gha-lambda",
+  "author": "Josh Worden <josh@parameter1.com>",
+  "license": "MIT",
+  "scripts": {
+    "ci": "yarn --pure-lockfile && yarn lint && yarn test",
+    "lint": "eslint src",
+    "test": "node test/index.js"
+  },
+  "devDependencies": {
+    "eslint": "^8.13.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0"
+  },
+  "dependencies": {}
+}
